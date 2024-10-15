@@ -10,18 +10,17 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/iv_detail"
+            android:id="@+id/iv_event_detail"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Judul -->
+
         <TextView
             android:id="@+id/tv_judul_detail"
             android:layout_width="match_parent"
@@ -29,11 +28,11 @@
             android:padding="3dp"
             android:layout_marginTop="20dp"
             android:textAlignment="center"
-            android:textSize="22sp"
+            android:textSize="23sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_detail"
+            app:layout_constraintTop_toBottomOf="@+id/iv_event_detail"
             tools:text="JUDUL" />
 
         <TextView
@@ -41,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="3dp"
+            android:textStyle="italic"
             android:textAlignment="center"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,44 +48,41 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_judul_detail"
             tools:text="Summary" />
 
-        <!-- Quota -->
         <TextView
             android:id="@+id/tv_quota_detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             tools:text="Quota"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:gravity="center"
             android:textStyle="bold"
-            android:padding="12dp"
+            android:padding="8dp"
             app:layout_constraintTop_toBottomOf="@+id/tv_summary_detail"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tv_jam_detail" />
+            app:layout_constraintEnd_toStartOf="@+id/tv_tanggal_jam_detail" />
 
-        <!-- Jam -->
         <TextView
-            android:id="@+id/tv_jam_detail"
+            android:id="@+id/tv_tanggal_jam_detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            tools:text="Jam"
-            android:textSize="13sp"
+            tools:text="Tanggal dan Jam"
+            android:textSize="14sp"
             android:gravity="center"
             android:textStyle="bold"
-            android:padding="12dp"
+            android:padding="8dp"
             app:layout_constraintTop_toBottomOf="@+id/tv_summary_detail"
             app:layout_constraintStart_toEndOf="@+id/tv_quota_detail"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Deskripsi -->
         <TextView
             android:id="@+id/tv_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:padding="12dp"
+            android:padding="16dp"
             android:textAlignment="viewStart"
             android:lineSpacingMultiplier="1.2"
-            app:layout_constraintTop_toBottomOf="@+id/tv_jam_detail"
+            app:layout_constraintTop_toBottomOf="@+id/tv_tanggal_jam_detail"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="Deskripsi detail dari event ini" />
@@ -95,11 +92,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="25dp"
             android:backgroundTint="@color/red"
             android:padding="10dp"
-            android:text="Register"
+            android:layout_marginBottom="20dp"
+            android:text="@string/Register"
             android:textColor="@android:color/white"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -107,6 +105,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_description" />
+
+        <ProgressBar
+            android:id="@+id/progres_bar_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

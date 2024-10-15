@@ -2,25 +2,25 @@ package com.zaqly.eventdicoding.api.model
 
 import com.google.gson.annotations.SerializedName
 
-data class EventModel(
-
-	@field:SerializedName("listEvents")
-	val listEvents: List<ListEventsItem?>? = null,
+data class DetailEventResponse(
 
 	@field:SerializedName("error")
 	val error: Boolean? = null,
 
 	@field:SerializedName("message")
-	val message: String? = null
+	val message: String? = null,
+
+	@field:SerializedName("event")
+	val event: Event? = null
 )
 
-data class ListEventsItem(
+data class Event(
 
 	@field:SerializedName("summary")
 	val summary: String? = null,
 
 	@field:SerializedName("mediaCover")
-	val  mediaCover: String? = null,
+	val mediaCover: String? = null,
 
 	@field:SerializedName("registrants")
 	val registrants: Int? = null,

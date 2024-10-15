@@ -8,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.zaqly.eventdicoding.DetailEventActivity
@@ -22,7 +20,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class FinishedFragment : Fragment() {
-    private lateinit var adapter: AdapterActivity // Ganti dengan nama adapter Anda
+    private lateinit var adapter: AdapterActivity
     private lateinit var rvEvents: RecyclerView
     private lateinit var progressBar: ProgressBar
 
@@ -30,7 +28,6 @@ class FinishedFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_finished, container, false)
     }
 
