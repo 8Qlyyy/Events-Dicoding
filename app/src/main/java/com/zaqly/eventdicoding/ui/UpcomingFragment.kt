@@ -47,7 +47,7 @@ class UpcomingFragment : Fragment() {
     private fun setupRecyclerView() {
         adapter = AdapterActivity(emptyList()) { eventId ->
             val intent = Intent(activity, DetailEventActivity::class.java)
-            intent.putExtra("EVENT_ID", eventId)
+            intent.putExtra("EVENT_ID", eventId.toString())
             startActivity(intent)
         }
         rvEvents.apply {

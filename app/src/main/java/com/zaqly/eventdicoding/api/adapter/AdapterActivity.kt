@@ -12,7 +12,7 @@ import com.zaqly.eventdicoding.api.model.ListEventsItem
 
 class AdapterActivity (
     private var events: List<ListEventsItem>,
-    private val onItemClick: (Int) -> Unit
+    private val onItemClick: (String) -> Unit
     ) : RecyclerView.Adapter<AdapterActivity.EventViewHolder>() {
 
     class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -36,9 +36,12 @@ class AdapterActivity (
         val event = events[position]
         holder.bind(event)
 
-        // Menangani klik item
         holder.itemView.setOnClickListener {
-            onItemClick(event.id ?: -1)
+            event.id?.let { eventId ->
+                onItemClick(eventId.toString())
+            } ?: run {
+                onItemClick("")
+            }
         }
     }
 

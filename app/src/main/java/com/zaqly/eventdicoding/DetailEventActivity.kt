@@ -3,62 +3,77 @@ package com.zaqly.eventdicoding
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
-import com.zaqly.eventdicoding.api.model.ListEventsItem
-import com.zaqly.eventdicoding.api.service.ApiConfig
+import com.zaqly.eventdicoding.api.model.Event
 import com.zaqly.eventdicoding.databinding.ActivityDetailEventBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 
 class DetailEventActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailEventBinding
+    private val viewModel: DetailEventViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailEventBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val eventId = intent.getIntExtra("EVENT_ID", -1)
-        if (eventId != -1) {
-            fetchEventDetails(eventId)
+        supportActionBar?.hide()
+
+        val eventId = intent.getStringExtra("EVENT_ID") ?: ""
+        if (eventId.isNotEmpty()) {
+            viewModel.fetchEventDetails(eventId)
+            observeViewModel()
         } else {
-            Toast.makeText(this, "Invalid event ID", Toast.LENGTH_SHORT).show()
+            showError("Invalid event ID")
             finish()
+        }
+
+        binding.main.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+            if (scrollY > 0) {
+                supportActionBar?.show()
+            } else {
+                supportActionBar?.hide()
+            }
+        }
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = ""
+
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = ""
         }
     }
 
-    private fun fetchEventDetails(eventId: Int) {
-        val call = ApiConfig.eventApiService.getEventDetails(eventId)
-        call.enqueue(object : Callback<ListEventsItem> {
-            override fun onResponse(call: Call<ListEventsItem>, response: Response<ListEventsItem>) {
-                if (response.isSuccessful) {
-                    val eventDetails = response.body()
-                    eventDetails?.let { displayEventDetails(it) }
-                } else {
-                    Toast.makeText(this@DetailEventActivity, "Failed to fetch event details", Toast.LENGTH_SHORT).show()
-                }
-            }
+    private fun observeViewModel() {
+        viewModel.eventDetail.observe(this) { event ->
+            event?.let { displayEventDetails(it) }
+        }
 
-            override fun onFailure(call: Call<ListEventsItem>, t: Throwable) {
-                Toast.makeText(this@DetailEventActivity, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+        viewModel.isLoading.observe(this) { isLoading ->
+            showLoading(isLoading)
+        }
+
+        viewModel.errorMessage.observe(this) { message ->
+            if (message.isNotEmpty()) {
+                showError(message)
             }
-        })
+        }
     }
 
-    private fun displayEventDetails(event: ListEventsItem) {
+    private fun displayEventDetails(event: Event) {
         binding.apply {
+            supportActionBar?.title = event.name
             tvJudulDetail.text = event.name ?: "No Name"
             tvSummaryDetail.text = event.summary ?: "No Summary"
             tvQuotaDetail.text = "Sisa Quota ${event.registrants ?: 0} / ${event.quota ?: 0}"
-            tvJamDetail.text = "${event.beginTime ?: ""} - ${event.endTime ?: ""}"
+            tvTanggalJamDetail.text = event.beginTime ?: "-"
 
             tvDescription.text = HtmlCompat.fromHtml(
                 event.description ?: "No Description",
@@ -66,18 +81,40 @@ class DetailEventActivity : AppCompatActivity() {
             )
 
             Glide.with(this@DetailEventActivity)
-                .load(event.mediaCover) // Ganti dengan URL gambar yang sesuai
-                .centerCrop() // Atur sesuai dengan kebutuhan
-                .into(ivDetail)
+                .load(event.mediaCover)
+                .centerCrop()
+                .into(ivEventDetail)
 
             btnRegister.setOnClickListener {
                 event.link?.let { link ->
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-                    startActivity(intent)
+                    openLinkInBrowser(link)
                 } ?: run {
-                    Toast.makeText(this@DetailEventActivity, "No link available", Toast.LENGTH_SHORT).show()
+                    showError("No link available")
                 }
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun openLinkInBrowser(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progresBarDetail.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    private fun showError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

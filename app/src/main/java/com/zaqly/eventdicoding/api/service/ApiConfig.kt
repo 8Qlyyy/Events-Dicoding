@@ -12,8 +12,7 @@ object ApiConfig {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-
-    val eventApiService: ApiService by lazy {
+    val  eventApiService: ApiService by lazy {
         retrofit.create(ApiService::class.java)
     }
 }
